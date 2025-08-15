@@ -3,10 +3,16 @@
     "productName": "ChatGPT Shell",
     "version": "0.1.0"
   },
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devPath": "http://localhost:5173",
+    "distDir": "../dist"
+  },
   "tauri": {
     "bundle": {
       "identifier": "com.example.chatgptshell",
-      "icon": ["icons/icon.svg"],
+      "icon": ["icons/icon.png"],
       "resources": ["../src/config.json", "../src/snippets.json", "../src/privacy.md"]
     },
     "windows": [
@@ -20,24 +26,12 @@
     ],
     "allowlist": {
       "all": false,
-      "globalShortcut": {
-        "all": true
-      },
-      "shell": {
-        "open": true
-      },
-      "clipboard": {
-        "writeText": true
-      },
-      "dialog": {
-        "message": true
-      },
-      "notification": {
-        "all": true
-      },
-      "window": {
-        "all": true
-      }
+      "globalShortcut": { "all": true },
+      "shell": { "open": true },
+      "clipboard": { "writeText": true },
+      "dialog": { "message": true },
+      "notification": { "all": true },
+      "window": { "all": true }
     }
   }
 }
