@@ -1,0 +1,43 @@
+{
+  "package": {
+    "productName": "ChatGPT Shell",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "bundle": {
+      "identifier": "com.example.chatgptshell",
+      "icon": ["icons/icon.svg"],
+      "resources": ["../src/config.json", "../src/snippets.json", "../src/privacy.md"]
+    },
+    "windows": [
+      {
+        "title": "Quick Prompt",
+        "width": 600,
+        "height": 120,
+        "visible": false,
+        "resizable": false
+      }
+    ],
+    "allowlist": {
+      "all": false,
+      "globalShortcut": {
+        "all": true
+      },
+      "shell": {
+        "open": true
+      },
+      "clipboard": {
+        "writeText": true
+      },
+      "dialog": {
+        "message": true
+      },
+      "notification": {
+        "all": true
+      },
+      "window": {
+        "all": true
+      }
+    }
+  }
+}

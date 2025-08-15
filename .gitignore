@@ -1,0 +1,7 @@
+node_modules/
+*.log
+dist/
+src/**/*.js
+src/**/*.js.map
+src-tauri/target/
+**/.DS_Store

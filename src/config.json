@@ -1,0 +1,9 @@
+{
+  "chatUrl": "https://chat.openai.com",
+  "hotkeys": {
+    "openChat": "Ctrl+Space",
+    "quickPrompt": "Ctrl+Shift+P",
+    "screenshot": "Ctrl+Shift+S"
+  },
+  "browserCandidates": ["google-chrome", "chromium", "brave-browser"]
+}

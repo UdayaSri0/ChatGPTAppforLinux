@@ -1,0 +1,14 @@
+[package]
+name = "chatgpt-shell"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tauri = { version = "1", features = ["system-tray", "global-shortcut", "clipboard-manager", "shell-open", "dialog-all", "notification-all", "window"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+which = "5"
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1"
+dirs = "5"
+tauri-plugin-single-instance = "0.1"

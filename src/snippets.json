@@ -1,0 +1,5 @@
+[
+  { "title": "Explain concept", "body": "Explain the concept of quantum computing in simple terms." },
+  { "title": "Summarize text", "body": "Summarize the following text in one paragraph:" },
+  { "title": "Generate code", "body": "Write a Python function that computes the Fibonacci sequence." }
+]

@@ -1,0 +1,20 @@
+{
+  "name": "chatgpt-shell",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tsc",
+    "tauri": "tauri",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.5.0",
+    "fuse.js": "^6.6.2"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.5.9",
+    "typescript": "^5.4.0",
+    "eslint": "^8.56.0"
+  }
+}
