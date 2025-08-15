@@ -4,7 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-tauri = { version = "1", features = ["system-tray", "global-shortcut", "clipboard-manager", "shell-open", "dialog-all", "notification-all", "window"] }
 tauri = { version = "1", features = [ "global-shortcut-all", "clipboard-write-text", "window-all", "dialog-message", "custom-protocol", "global-shortcut", "clipboard-manager", "shell-open", "notification-all", "window"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
