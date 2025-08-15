@@ -33,4 +33,26 @@ npm run dev
 npm run tauri build
 ```
 
+## Create a Debian package
+Build assets and produce an installable `.deb`:
+
+```bash
+# compile TypeScript
+npm run build
+
+# compile the Rust backend
+cargo build --release
+
+# install cargo-deb if needed
+cargo install cargo-deb
+
+# package without rebuilding
+cargo deb --no-build
+
+# install the generated package
+sudo dpkg -i target/debian/chatgpt-shell_*.deb
+```
+
+The `.deb` package will appear under `target/debian`.
+
 See [privacy.md](src/privacy.md) for terms.
