@@ -6,8 +6,14 @@
   "tauri": {
     "bundle": {
       "identifier": "com.example.chatgptshell",
-      "icon": ["icons/icon.svg"],
-      "resources": ["../src/config.json", "../src/snippets.json", "../src/privacy.md"]
+      "icon": [
+        "icons/icon.svg"
+      ],
+      "resources": [
+        "../src/config.json",
+        "../src/snippets.json",
+        "../src/privacy.md"
+      ]
     },
     "windows": [
       {
@@ -39,5 +45,9 @@
         "all": true
       }
     }
+  },
+  "build": {
+    "devPath": "../src",
+    "distDir": "../src"
   }
 }
