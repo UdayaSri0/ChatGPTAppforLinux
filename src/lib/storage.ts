@@ -24,7 +24,7 @@ async function ensureFile(name: string) {
   } catch (_) {
     const res = await resolveResource(name);
     const data = await readTextFile(res);
-    await writeTextFile({ path: name, contents: data, dir: BaseDirectory.App });
+    await writeTextFile({ path: name, contents: data }, { dir: BaseDirectory.App });
   }
 }
 
@@ -41,5 +41,5 @@ export async function loadSnippets(): Promise<Snippet[]> {
 }
 
 export async function saveSnippets(list: Snippet[]): Promise<void> {
-  await writeTextFile({ path: 'snippets.json', contents: JSON.stringify(list, null, 2), dir: BaseDirectory.App });
+  await writeTextFile({ path: 'snippets.json', contents: JSON.stringify(list, null, 2) }, { dir: BaseDirectory.App });
 }
