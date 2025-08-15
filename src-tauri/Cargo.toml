@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 tauri = { version = "1", features = ["system-tray", "global-shortcut", "clipboard-manager", "shell-open", "dialog-all", "notification-all", "window"] }
+tauri = { version = "1", features = [ "global-shortcut-all", "clipboard-write-text", "window-all", "dialog-message", "custom-protocol", "global-shortcut", "clipboard-manager", "shell-open", "notification-all", "window"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 which = "5"
@@ -12,3 +13,7 @@ chrono = { version = "0.4", features = ["serde"] }
 thiserror = "1"
 dirs = "5"
 tauri-plugin-single-instance = "0.1"
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
