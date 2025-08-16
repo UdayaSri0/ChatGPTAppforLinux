@@ -11,7 +11,7 @@ which = "5"
 chrono = { version = "0.4", features = ["serde"] }
 thiserror = "1"
 dirs = "5"
-tauri-plugin-single-instance = "0.1"
+tauri-plugin-single-instance = "2.3.2"
 
 [features]
 default = ["custom-protocol"]
