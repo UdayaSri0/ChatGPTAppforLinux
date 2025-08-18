@@ -22,9 +22,14 @@ async function ensureFile(name: string) {
   try {
     await readTextFile(name, { dir: BaseDirectory.App });
   } catch (_) {
-    const res = await resolveResource(name);
-    const data = await readTextFile(res);
-    await writeTextFile({ path: name, contents: data }, { dir: BaseDirectory.App });
+    try {
+      const res = await resolveResource(name);
+      const data = await readTextFile(res);
+      await writeTextFile({ path: name, contents: data }, { dir: BaseDirectory.App });
+    } catch (err) {
+      console.error(`Failed to initialize ${name}`, err);
+      throw err;
+    }
   }
 }
 
@@ -51,5 +56,13 @@ export async function loadSnippets(): Promise<Snippet[]> {
 }
 
 export async function saveSnippets(list: Snippet[]): Promise<void> {
-  await writeTextFile({ path: 'snippets.json', contents: JSON.stringify(list, null, 2) }, { dir: BaseDirectory.App });
+  try {
+    await writeTextFile(
+      { path: 'snippets.json', contents: JSON.stringify(list, null, 2) },
+      { dir: BaseDirectory.App }
+    );
+  } catch (err) {
+    console.error('Failed to save snippets', err);
+    throw err;
+  }
 }
