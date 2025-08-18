@@ -24,11 +24,16 @@ function render(items: Snippet[]) {
 }
 
 async function init() {
-  const cfg = await loadConfig();
-  showHotkeys(cfg);
-  snippets = await loadSnippets();
-  fuse = new Fuse(snippets, { keys: ['title', 'body'] });
-  render(snippets);
+  try {
+    const cfg = await loadConfig();
+    showHotkeys(cfg);
+    snippets = await loadSnippets();
+    fuse = new Fuse(snippets, { keys: ['title', 'body'] });
+    render(snippets);
+  } catch (err) {
+    console.error('Initialization failed', err);
+    alert('Failed to load configuration. Check console for details.');
+  }
 }
 init();
 
