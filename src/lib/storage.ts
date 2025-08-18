@@ -30,14 +30,24 @@ async function ensureFile(name: string) {
 
 export async function loadConfig(): Promise<Config> {
   await ensureFile('config.json');
-  const data = await readTextFile('config.json', { dir: BaseDirectory.App });
-  return JSON.parse(data) as Config;
+  try {
+    const data = await readTextFile('config.json', { dir: BaseDirectory.App });
+    return JSON.parse(data) as Config;
+  } catch (err) {
+    console.error('Failed to load config', err);
+    throw err;
+  }
 }
 
 export async function loadSnippets(): Promise<Snippet[]> {
   await ensureFile('snippets.json');
-  const data = await readTextFile('snippets.json', { dir: BaseDirectory.App });
-  return JSON.parse(data) as Snippet[];
+  try {
+    const data = await readTextFile('snippets.json', { dir: BaseDirectory.App });
+    return JSON.parse(data) as Snippet[];
+  } catch (err) {
+    console.error('Failed to load snippets', err);
+    return [];
+  }
 }
 
 export async function saveSnippets(list: Snippet[]): Promise<void> {
