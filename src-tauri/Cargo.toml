@@ -19,8 +19,8 @@ which = "5"
 chrono = { version = "0.4", features = ["serde"] }
 thiserror = "1"
 dirs = "5"
-# Use the Tauri 1 compatible version of the single instance plugin.
-tauri-plugin-single-instance = "1"
+# Use the latest Tauri-compatible version of the single instance plugin.
+tauri-plugin-single-instance = "2"
 
 [features]
 default = ["custom-protocol"]
