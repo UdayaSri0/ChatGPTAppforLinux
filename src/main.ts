@@ -47,12 +47,22 @@ input.addEventListener('input', () => {
 });
 
 document.getElementById('copy')!.addEventListener('click', async () => {
-  await writeText(input.value);
-  window.close();
+  try {
+    await writeText(input.value);
+    window.close();
+  } catch (err) {
+    console.error('Failed to copy text', err);
+    alert('Unable to copy to clipboard');
+  }
 });
 
 document.getElementById('copyFocus')!.addEventListener('click', async () => {
-  await writeText(input.value);
-  await invoke('open_chatgpt');
-  window.close();
+  try {
+    await writeText(input.value);
+    await invoke('open_chatgpt');
+    window.close();
+  } catch (err) {
+    console.error('Failed to copy or open ChatGPT', err);
+    alert('Unable to copy text or open ChatGPT');
+  }
 });

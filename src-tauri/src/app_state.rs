@@ -30,9 +30,13 @@ impl AppState {
         if !path.exists() {
             if let Some(res) = app.path_resolver().resolve_resource("config.json") {
                 if let Some(parent) = path.parent() {
-                    std::fs::create_dir_all(parent).ok();
+                    if let Err(e) = std::fs::create_dir_all(parent) {
+                        eprintln!("failed to create config directory: {e}");
+                    }
                 }
-                let _ = std::fs::copy(res, &path);
+                if let Err(e) = std::fs::copy(res, &path) {
+                    eprintln!("failed to copy default config: {e}");
+                }
             }
         }
         let data = match std::fs::read_to_string(&path) {
