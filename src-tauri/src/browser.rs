@@ -1,4 +1,4 @@
-use std::process::Command;
+use std::{env, process::Command};
 use tauri::AppHandle;
 
 use crate::{app_state::Config, focus};
@@ -8,7 +8,7 @@ pub fn open(app: &AppHandle, cfg: &Config) {
         return;
     }
     for b in &cfg.browser_candidates {
-        if which::which(b).is_ok() {
+        if command_exists(b) {
             if let Err(e) = Command::new(b)
                 .args([format!("--app={}", cfg.chat_url), String::from("--new-window")])
                 .spawn()
@@ -38,4 +38,10 @@ pub fn open(app: &AppHandle, cfg: &Config) {
             }
         }
     }
+}
+
+fn command_exists(cmd: &str) -> bool {
+    env::var_os("PATH").map_or(false, |paths| {
+        env::split_paths(&paths).any(|p| p.join(cmd).exists())
+    })
 }

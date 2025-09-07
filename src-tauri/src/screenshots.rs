@@ -1,10 +1,10 @@
-use std::process::Command;
+use std::{env, process::Command};
 use tauri::AppHandle;
 
 use crate::{app_state::Config, browser, paths};
 
 pub fn capture(app: &AppHandle, cfg: &Config) {
-    if which::which("scrot").is_err() {
+    if !command_exists("scrot") {
         let win = app.get_window("main");
         tauri::api::dialog::message(win.as_ref(), "scrot not installed. Install with: sudo apt install scrot");
         return;
@@ -28,4 +28,10 @@ pub fn capture(app: &AppHandle, cfg: &Config) {
             tauri::api::dialog::message(win.as_ref(), "Failed to capture screenshot");
         }
     }
+}
+
+fn command_exists(cmd: &str) -> bool {
+    env::var_os("PATH").map_or(false, |paths| {
+        env::split_paths(&paths).any(|p| p.join(cmd).exists())
+    })
 }
