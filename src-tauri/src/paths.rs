@@ -17,14 +17,22 @@ pub fn snippets_path(app: &AppHandle) -> PathBuf {
 }
 
 pub fn screenshots_dir() -> PathBuf {
-    dirs::home_dir().unwrap_or_else(|| PathBuf::from(".")).join("Pictures").join("ChatGPT-Shots")
+    std::env::var_os("HOME")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| PathBuf::from("."))
+        .join("Pictures")
+        .join("ChatGPT-Shots")
 }
 
 pub fn screenshot_file() -> PathBuf {
-    use chrono::Local;
+    use std::time::{SystemTime, UNIX_EPOCH};
     let dir = screenshots_dir();
     if let Err(e) = std::fs::create_dir_all(&dir) {
         eprintln!("failed to create screenshot directory: {e}");
     }
-    dir.join(format!("{}.png", Local::now().format("%Y%m%d-%H%M%S")))
+    let ts = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
+    dir.join(format!("{ts}.png"))
 }
