@@ -5,7 +5,7 @@ import { loadSnippets, loadConfig, Snippet } from './lib/storage';
 import { showHotkeys } from './lib/hotkeys';
 
 let snippets: Snippet[] = [];
-let fuse: Fuse<Snippet>;
+let fuse = new Fuse<Snippet>([], { keys: ['title', 'body'] });
 
 const input = document.getElementById('prompt') as HTMLInputElement;
 const list = document.getElementById('snippets') as HTMLUListElement;
@@ -24,18 +24,18 @@ function render(items: Snippet[]) {
 }
 
 async function init() {
-  try {
-    const cfg = await loadConfig();
-    showHotkeys(cfg);
-    snippets = await loadSnippets();
-    fuse = new Fuse(snippets, { keys: ['title', 'body'] });
-    render(snippets);
-  } catch (err) {
-    console.error('Initialization failed', err);
-    alert('Failed to load configuration. Check console for details.');
-  }
+  const cfg = await loadConfig();
+  showHotkeys(cfg);
+  snippets = await loadSnippets();
+  fuse = new Fuse(snippets, { keys: ['title', 'body'] });
+  render(snippets);
 }
-init();
+init().catch(err => {
+  console.error('Initialization failed', err);
+  snippets = [];
+  fuse = new Fuse(snippets, { keys: ['title', 'body'] });
+  render(snippets);
+});
 
 input.addEventListener('input', () => {
   const term = input.value.trim();

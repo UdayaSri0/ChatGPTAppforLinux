@@ -5,11 +5,13 @@ mod browser;
 mod focus;
 mod global_hotkeys;
 mod paths;
+mod quick_prompt;
 mod screenshots;
 mod tray;
 
 use app_state::AppState;
-use tauri::{Manager};
+use single_instance::SingleInstance;
+use tauri::Manager;
 
 #[tauri::command]
 fn open_chatgpt(app: tauri::AppHandle) {
@@ -18,13 +20,14 @@ fn open_chatgpt(app: tauri::AppHandle) {
 }
 
 fn main() {
+    let single_instance_guard = SingleInstance::new("com.example.chatgptshell")
+        .expect("failed to initialize single instance guard");
+    if !single_instance_guard.is_single() {
+        let _ = focus::focus_existing();
+        return;
+    }
+
     tauri::Builder::default()
-        .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
-            if let Some(w) = app.get_window("main") {
-                let _ = w.show();
-                let _ = w.set_focus();
-            }
-        }))
         .setup(|app| {
             let state = AppState::load(app);
             app.manage(state);

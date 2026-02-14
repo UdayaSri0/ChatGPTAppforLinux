@@ -1,5 +1,5 @@
 import { BaseDirectory, readTextFile, writeTextFile } from '@tauri-apps/api/fs';
-import { appDir, resolveResource } from '@tauri-apps/api/path';
+import { resolveResource } from '@tauri-apps/api/path';
 
 export interface Hotkeys {
   openChat: string;
@@ -18,6 +18,72 @@ export interface Snippet {
   body: string;
 }
 
+function defaultConfig(): Config {
+  return {
+    chatUrl: 'https://chatgpt.com',
+    hotkeys: {
+      openChat: 'Ctrl+Space',
+      quickPrompt: 'Ctrl+Shift+P',
+      screenshot: 'Ctrl+Shift+S',
+    },
+    browserCandidates: ['google-chrome', 'chromium', 'brave-browser'],
+  };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function normalizeConfig(value: unknown): Config {
+  const defaults = defaultConfig();
+  if (!isRecord(value)) {
+    return defaults;
+  }
+
+  const hotkeys = isRecord(value.hotkeys) ? value.hotkeys : {};
+  const browserCandidates = Array.isArray(value.browserCandidates)
+    ? value.browserCandidates.filter(
+        (candidate): candidate is string =>
+          typeof candidate === 'string' && candidate.trim().length > 0
+      )
+    : [];
+
+  return {
+    chatUrl:
+      typeof value.chatUrl === 'string' && value.chatUrl.trim().length > 0
+        ? value.chatUrl
+        : defaults.chatUrl,
+    hotkeys: {
+      openChat:
+        typeof hotkeys.openChat === 'string' && hotkeys.openChat.trim().length > 0
+          ? hotkeys.openChat
+          : defaults.hotkeys.openChat,
+      quickPrompt:
+        typeof hotkeys.quickPrompt === 'string' && hotkeys.quickPrompt.trim().length > 0
+          ? hotkeys.quickPrompt
+          : defaults.hotkeys.quickPrompt,
+      screenshot:
+        typeof hotkeys.screenshot === 'string' && hotkeys.screenshot.trim().length > 0
+          ? hotkeys.screenshot
+          : defaults.hotkeys.screenshot,
+    },
+    browserCandidates:
+      browserCandidates.length > 0 ? browserCandidates : defaults.browserCandidates,
+  };
+}
+
+function normalizeSnippets(value: unknown): Snippet[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .filter(
+      (item): item is { title: string; body: string } =>
+        isRecord(item) && typeof item.title === 'string' && typeof item.body === 'string'
+    )
+    .map(item => ({ title: item.title, body: item.body }));
+}
+
 async function ensureFile(name: string) {
   try {
     await readTextFile(name, { dir: BaseDirectory.App });
@@ -28,7 +94,6 @@ async function ensureFile(name: string) {
       await writeTextFile({ path: name, contents: data }, { dir: BaseDirectory.App });
     } catch (err) {
       console.error(`Failed to initialize ${name}`, err);
-      throw err;
     }
   }
 }
@@ -37,10 +102,10 @@ export async function loadConfig(): Promise<Config> {
   await ensureFile('config.json');
   try {
     const data = await readTextFile('config.json', { dir: BaseDirectory.App });
-    return JSON.parse(data) as Config;
+    return normalizeConfig(JSON.parse(data));
   } catch (err) {
     console.error('Failed to load config', err);
-    throw err;
+    return defaultConfig();
   }
 }
 
@@ -48,7 +113,7 @@ export async function loadSnippets(): Promise<Snippet[]> {
   await ensureFile('snippets.json');
   try {
     const data = await readTextFile('snippets.json', { dir: BaseDirectory.App });
-    return JSON.parse(data) as Snippet[];
+    return normalizeSnippets(JSON.parse(data));
   } catch (err) {
     console.error('Failed to load snippets', err);
     return [];
