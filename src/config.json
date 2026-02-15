@@ -1,5 +1,5 @@
 {
-  "chatUrl": "https://chat.openai.com",
+  "chatUrl": "https://chatgpt.com",
   "hotkeys": {
     "openChat": "Ctrl+Space",
     "quickPrompt": "Ctrl+Shift+P",

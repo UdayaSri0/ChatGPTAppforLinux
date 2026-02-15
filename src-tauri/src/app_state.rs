@@ -5,7 +5,7 @@ use tauri::AppHandle;
 use crate::paths;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", default)]
 pub struct Hotkeys {
     pub open_chat: String,
     pub quick_prompt: String,
@@ -13,7 +13,7 @@ pub struct Hotkeys {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", default)]
 pub struct Config {
     pub chat_url: String,
     pub hotkeys: Hotkeys,
@@ -48,11 +48,15 @@ impl AppState {
                 };
             }
         };
-        let config: Config = serde_json::from_str(&data).unwrap_or_else(|e| {
-            eprintln!("failed to parse config: {e}");
-            Config::default()
-        });
-        Self { config: Mutex::new(config) }
+        let config: Config = serde_json::from_str(&data)
+            .unwrap_or_else(|e| {
+                eprintln!("failed to parse config: {e}");
+                Config::default()
+            })
+            .normalize();
+        Self {
+            config: Mutex::new(config),
+        }
     }
 }
 
@@ -69,7 +73,7 @@ impl Default for Hotkeys {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            chat_url: "https://chat.openai.com".into(),
+            chat_url: "https://chatgpt.com".into(),
             hotkeys: Hotkeys::default(),
             browser_candidates: vec![
                 "google-chrome".into(),
@@ -77,5 +81,35 @@ impl Default for Config {
                 "brave-browser".into(),
             ],
         }
+    }
+}
+
+impl Config {
+    fn normalize(mut self) -> Self {
+        let defaults = Config::default();
+
+        if self.chat_url.trim().is_empty() {
+            self.chat_url = defaults.chat_url.clone();
+        }
+        if self.hotkeys.open_chat.trim().is_empty() {
+            self.hotkeys.open_chat = defaults.hotkeys.open_chat.clone();
+        }
+        if self.hotkeys.quick_prompt.trim().is_empty() {
+            self.hotkeys.quick_prompt = defaults.hotkeys.quick_prompt.clone();
+        }
+        if self.hotkeys.screenshot.trim().is_empty() {
+            self.hotkeys.screenshot = defaults.hotkeys.screenshot.clone();
+        }
+
+        self.browser_candidates = self
+            .browser_candidates
+            .into_iter()
+            .filter(|candidate| !candidate.trim().is_empty())
+            .collect();
+        if self.browser_candidates.is_empty() {
+            self.browser_candidates = defaults.browser_candidates;
+        }
+
+        self
     }
 }

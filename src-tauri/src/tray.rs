@@ -1,11 +1,11 @@
-use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, AppHandle, Manager};
+use tauri::{AppHandle, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
 
-use crate::{app_state::AppState, browser, screenshots};
+use crate::{app_state::AppState, browser, quick_prompt, screenshots};
 
 pub fn create() -> SystemTray {
-    let open = CustomMenuItem::new("open_chatgpt", "Open ChatGPT");
-    let prompt = CustomMenuItem::new("quick_prompt", "Quick Prompt");
-    let shot = CustomMenuItem::new("screenshot", "Screenshot to File");
+    let open = CustomMenuItem::new("open_chatgpt", "Focus ChatGPT");
+    let prompt = CustomMenuItem::new("toggle_window", "Toggle ChatGPT Window");
+    let shot = CustomMenuItem::new("screenshot", "Capture Screenshot to File");
     let quit = CustomMenuItem::new("quit", "Quit");
     let menu = SystemTrayMenu::new()
         .add_item(open)
@@ -21,9 +21,7 @@ pub fn handler(app: &AppHandle, event: SystemTrayEvent) {
         let cfg = app.state::<AppState>().config.lock().unwrap().clone();
         match id.as_str() {
             "open_chatgpt" => browser::open(app, &cfg),
-            "quick_prompt" => {
-                if let Some(w) = app.get_window("main") { let _ = w.show(); let _ = w.set_focus(); }
-            }
+            "toggle_window" => quick_prompt::toggle(app),
             "screenshot" => screenshots::capture(app, &cfg),
             "quit" => app.exit(0),
             _ => {}
