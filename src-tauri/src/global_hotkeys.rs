@@ -28,9 +28,9 @@ pub fn register(app: &AppHandle) {
         app,
         &mut seen_accelerators,
         &mut conflicts,
-        "Toggle Quick Prompt",
+        "Toggle ChatGPT Window",
         &cfg.hotkeys.quick_prompt,
-        "Failed to register prompt shortcut",
+        "Failed to register toggle window shortcut",
         move || quick_prompt::toggle(&prompt_app),
     );
 

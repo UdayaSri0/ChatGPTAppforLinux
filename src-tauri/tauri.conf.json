@@ -1,6 +1,6 @@
 {
   "package": {
-    "productName": "ChatGPT Shell",
+    "productName": "ChatGPT Native",
     "version": "0.1.0"
   },
   "build": {
@@ -11,17 +11,20 @@
   },
   "tauri": {
     "bundle": {
-      "identifier": "com.example.chatgptshell",
+      "identifier": "com.example.chatgptnative",
       "icon": ["icons/icon.png"],
-      "resources": ["../src/config.json", "../src/snippets.json", "../src/privacy.md"]
+      "resources": ["../src/config.json", "../src/privacy.md"]
     },
     "windows": [
       {
-        "title": "Quick Prompt",
-        "width": 600,
-        "height": 120,
-        "visible": false,
-        "resizable": false
+        "title": "ChatGPT Native",
+        "url": "https://chatgpt.com",
+        "width": 1280,
+        "height": 860,
+        "minWidth": 960,
+        "minHeight": 640,
+        "visible": true,
+        "resizable": true
       }
     ],
     "allowlist": {

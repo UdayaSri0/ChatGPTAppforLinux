@@ -20,7 +20,7 @@ fn open_chatgpt(app: tauri::AppHandle) {
 }
 
 fn main() {
-    let single_instance_guard = SingleInstance::new("com.example.chatgptshell")
+    let single_instance_guard = SingleInstance::new("com.example.chatgptnative")
         .expect("failed to initialize single instance guard");
     if !single_instance_guard.is_single() {
         let _ = focus::focus_existing();
